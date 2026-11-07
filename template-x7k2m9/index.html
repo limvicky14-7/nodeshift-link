@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Template NodeShift</title>
+<meta name="theme-color" content="#0B1120">
+<style>
+  :root {
+    --navy: #0B1120; --blue: #3B82F6; --coral: #FF6B68; --white: #fff;
+    --soft: rgba(255,255,255,.68); --line: rgba(255,255,255,.12); --card: rgba(255,255,255,.05);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    background: var(--navy); color: var(--white); min-height: 100vh;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background-image: radial-gradient(60% 40% at 85% 0%, rgba(59,130,246,.2), transparent 70%);
+    background-repeat: no-repeat;
+  }
+  main { max-width: 560px; margin: 0 auto; padding: 36px 16px 56px; }
+  .tag { font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--coral); margin-bottom: 12px; }
+  h1 { font-size: 30px; line-height: 1.1; font-weight: 900; letter-spacing: -.02em; margin-bottom: 12px; }
+  .intro { color: var(--soft); font-size: 15px; line-height: 1.55; margin-bottom: 24px; }
+  .tabs { display: flex; gap: 22px; border-bottom: 1px solid var(--line); margin-bottom: 14px; }
+  .tabs button {
+    background: none; border: 0; color: var(--soft); font: inherit; font-weight: 700; font-size: 15px;
+    padding: 10px 0; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -1px;
+  }
+  .tabs button[aria-pressed="true"] { color: var(--white); border-bottom-color: var(--coral); }
+  .tabs button:focus-visible, .copy:focus-visible, .go:focus-visible, summary:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+  details { border: 1px solid var(--line); background: var(--card); border-radius: 14px; margin-bottom: 10px; overflow: hidden; }
+  summary { list-style: none; cursor: pointer; padding: 15px 16px; display: flex; gap: 12px; align-items: flex-start; }
+  summary::-webkit-details-marker { display: none; }
+  .num { flex: none; min-width: 26px; height: 26px; border-radius: 50%; background: var(--coral); color: var(--navy); font-weight: 900; font-size: 13px; display: grid; place-items: center; margin-top: 1px; }
+  .num.link { background: var(--blue); color: var(--white); }
+  .t { font-weight: 800; font-size: 16px; line-height: 1.3; }
+  .k { color: var(--soft); font-size: 14px; line-height: 1.4; margin-top: 3px; }
+  .arrow { margin-left: auto; color: var(--soft); transition: none; flex: none; padding-top: 2px; }
+  details[open] .arrow { transform: rotate(90deg); }
+  .body { padding: 0 16px 16px; }
+  pre {
+    white-space: pre-wrap; word-wrap: break-word; background: rgba(0,0,0,.35); border: 1px solid var(--line);
+    border-radius: 10px; padding: 14px; font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+    font-size: 13.5px; line-height: 1.6; margin-bottom: 12px;
+  }
+  .copy, .go {
+    display: block; width: 100%; text-align: center; text-decoration: none; font: inherit; font-weight: 800; font-size: 16px;
+    padding: 14px; border-radius: 12px; border: 0; cursor: pointer; background: var(--coral); color: var(--navy);
+  }
+  .go { background: var(--blue); color: var(--white); }
+  .copy.done { background: var(--white); }
+  .empty { color: var(--soft); padding: 20px 0; }
+  footer { margin-top: 28px; font-size: 13px; color: var(--soft); line-height: 1.5; }
+  footer a { color: var(--white); }
+</style>
+</head>
+<body>
+<main>
+  <div class="tag">NodeShift · Gratis</div>
+  <h1 id="judul"></h1>
+  <p class="intro" id="pengantar"></p>
+
+  <div class="tabs" id="tabs">
+    <button type="button" data-f="semua" aria-pressed="true">Semua</button>
+    <button type="button" data-f="prompt" aria-pressed="false">Prompt</button>
+    <button type="button" data-f="link" aria-pressed="false">Link</button>
+  </div>
+
+  <div id="daftar"></div>
+
+  <footer>Dari <a href="https://www.instagram.com/nodeshift.tech/">@nodeshift.tech</a>. Pakai, jangan cuma disimpan.</footer>
+</main>
+
+<script src="data.js"></script>
+<script>
+(function () {
+  var daftar = document.getElementById("daftar");
+  var filter = "semua";
+
+  document.getElementById("judul").textContent = JUDUL;
+  document.getElementById("pengantar").textContent = PENGANTAR;
+
+  function salin(teks, tombol) {
+    function ok() {
+      tombol.textContent = "Tersalin ✓";
+      tombol.className = "copy done";
+      setTimeout(function () { tombol.textContent = "Salin prompt"; tombol.className = "copy"; }, 1800);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(teks).then(ok, function () { cadangan(teks); ok(); });
+    } else { cadangan(teks); ok(); }
+  }
+  function cadangan(teks) {
+    var a = document.createElement("textarea");
+    a.value = teks; a.style.position = "fixed"; a.style.opacity = "0";
+    document.body.appendChild(a); a.select();
+    try { document.execCommand("copy"); } catch (e) {}
+    document.body.removeChild(a);
+  }
+  function el(tag, cls, teks) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (teks) e.textContent = teks;
+    return e;
+  }
+
+  function render() {
+    daftar.textContent = "";
+    var n = 0;
+    ITEMS.forEach(function (it) {
+      if (filter !== "semua" && it.tipe !== filter) return;
+      n++;
+      var d = el("details");
+      var s = el("summary");
+      s.appendChild(el("span", "num" + (it.tipe === "link" ? " link" : ""), it.tipe === "link" ? "↗" : String(n)));
+      var teks = el("span");
+      teks.appendChild(el("div", "t", it.judul));
+      if (it.ket) teks.appendChild(el("div", "k", it.ket));
+      s.appendChild(teks);
+      s.appendChild(el("span", "arrow", "›"));
+      d.appendChild(s);
+
+      var b = el("div", "body");
+      if (it.tipe === "link") {
+        var a = el("a", "go", it.label || "Buka link");
+        a.href = it.url; a.target = "_blank"; a.rel = "noopener noreferrer";
+        b.appendChild(a);
+      } else {
+        b.appendChild(el("pre", "", it.isi));
+        var c = el("button", "copy", "Salin prompt");
+        c.type = "button";
+        c.addEventListener("click", function () { salin(it.isi, c); });
+        b.appendChild(c);
+      }
+      d.appendChild(b);
+      daftar.appendChild(d);
+    });
+    if (!n) daftar.appendChild(el("p", "empty", "Belum ada isi di bagian ini."));
+  }
+
+  document.getElementById("tabs").addEventListener("click", function (e) {
+    var f = e.target.getAttribute && e.target.getAttribute("data-f");
+    if (!f) return;
+    filter = f;
+    var bs = this.querySelectorAll("button");
+    for (var i = 0; i < bs.length; i++) bs[i].setAttribute("aria-pressed", bs[i] === e.target ? "true" : "false");
+    render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
