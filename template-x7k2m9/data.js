@@ -77,6 +77,24 @@ var ITEMS = [
     judul: "Simpan aturan proyek sekali, dipakai selamanya",
     ket: "Bikin CLAUDE.md supaya Claude ingat aturan proyek lo.",
     isi: "Bikin file CLAUDE.md berisi aturan proyek ini: perintah penting, gaya kode, folder yang gak boleh disentuh, dan cara ngecek kerjaan sebelum selesai. Ambil dari kode yang ada, jangan ngarang."
+  },
+  {
+    tipe: "prompt",
+    judul: "Satu tugas, level 1: Chat",
+    ket: "Reel \"Satu Tugas, Tiga Level\". Tempel datanya ke chat, dapat jawaban. Cek hasilnya sendiri.",
+    isi: "Ini catatan pengeluaran gue bulan Oktober. Hitung total per kategori dan kasih tau kategori mana yang paling boros. <tempel isi file CSV lo di sini>"
+  },
+  {
+    tipe: "prompt",
+    judul: "Satu tugas, level 2: Kode",
+    ket: "Minta AI nulis script-nya. Lo yang jalanin, angkanya pasti, bulan depan tinggal jalanin lagi.",
+    isi: "Tulis script Python rekap.py yang membaca <nama-file>.csv, menghitung total per kategori, lalu menampilkan kategori yang paling boros. Pakai modul csv bawaan, tanpa install apa pun."
+  },
+  {
+    tipe: "prompt",
+    judul: "Satu tugas, level 3: Sistem",
+    ket: "Satu perintah ke Claude Code. Dia baca, hitung, cek pakai cara kedua, lalu tulis laporan.",
+    isi: "Baca <nama-file>.csv. Hitung total per kategori dan kategori yang paling boros, simpan hasilnya ke laporan.md. Cek hasilnya dengan cara kedua sebelum selesai."
   }
 
   // Contoh item link (hapus tanda // di depan tiap baris untuk memakainya):
